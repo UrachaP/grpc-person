@@ -1,0 +1,33 @@
+syntax="proto3";
+package pb;
+option go_package="./pb";
+import "google/protobuf/timestamp.proto";
+
+service PersonManagement {
+  rpc GetPerson (GetPersonRequest) returns (GetPersonResponse);
+}
+
+message GetPersonRequest {
+  string Name = 1;
+  int32 Age = 2;
+
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+  message PhoneName {
+    PhoneType Type = 1;
+    string Name =2;
+  }
+  PhoneName PhoneMain = 3;
+  repeated PhoneName PhoneOther = 4;
+
+  google.protobuf.Timestamp Birthday = 5;
+}
+
+
+
+message GetPersonResponse {
+  string status = 1;
+}
