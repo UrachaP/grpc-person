@@ -22,17 +22,10 @@ type Person struct {
 	Birthday   *time.Time `json:"birthday"`
 }
 
-type PhoneType int
 type Phone struct {
-	Name string    `json:"name"`
-	Type PhoneType `json:"type"`
+	Name string                        `json:"name"`
+	Type pb.GetPersonRequest_PhoneType `json:"type"`
 }
-
-const (
-	MOBILE PhoneType = iota
-	HOME
-	WORK
-)
 
 func main() {
 	e := echo.New()
@@ -63,22 +56,22 @@ func (user UserClient) GetPerson(c echo.Context) error {
 	p.Name = "spider man"
 
 	//when use grpc struct have to convert by use its function
-	p.PhoneMain = Phone{Name: "0", Type: MOBILE}
+	p.PhoneMain = Phone{Name: "0", Type: pb.GetPersonRequest_MOBILE}
 	phoneMain := pb.GetPersonRequest_PhoneName{
 		Name: p.PhoneMain.Name,
 		Type: pb.GetPersonRequest_PhoneType(p.PhoneMain.Type),
 	}
 
 	//array
-	p.PhoneOther = []Phone{{"1", HOME}, {"2", WORK}}
+	p.PhoneOther = []Phone{{"1", pb.GetPersonRequest_HOME}, {"2", pb.GetPersonRequest_WORK}}
 	phoneOthers := []*pb.GetPersonRequest_PhoneName{
 		{
 			Name: p.PhoneOther[0].Name,
-			Type: pb.GetPersonRequest_PhoneType(p.PhoneOther[0].Type),
+			Type: p.PhoneOther[0].Type,
 		},
 		{
 			Name: p.PhoneOther[1].Name,
-			Type: pb.GetPersonRequest_PhoneType(p.PhoneOther[1].Type),
+			Type: p.PhoneOther[1].Type,
 		},
 	}
 
